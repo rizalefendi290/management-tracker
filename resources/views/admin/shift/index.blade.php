@@ -11,31 +11,42 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-<table class="table table-bordered">
-    <thead>
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
         <tr>
-            <th>Nama</th>
+            <th>Nama Karyawan</th>
             <th>Hari</th>
-            <th>Jam</th>
+            <th>Waktu</th>
             <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($shifts as $shift)
+        @forelse($shifts as $shift)
         <tr>
             <td>{{ $shift->user->name }}</td>
             <td>{{ $shift->hari }}</td>
             <td>{{ $shift->jam_mulai }} - {{ $shift->jam_selesai }}</td>
             <td>
-                <a href="{{ route('shift.edit', $shift->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ route('shift.edit', $shift->id) }}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
                 <form action="{{ route('shift.destroy', $shift->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin hapus?')">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger btn-sm">Hapus</button>
+                    <button class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
                 </form>
             </td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+            <td colspan="4" class="text-center text-muted py-4">
+                <i class="bi bi-info-circle"></i> Belum ada data shift.
+            </td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
+
 @endsection

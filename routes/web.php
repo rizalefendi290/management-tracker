@@ -44,6 +44,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/gaji/pdf', [AdminGajiController::class, 'exportPDF'])->name('gaji.pdf');
 
     Route::resource('/shift', ShiftController::class);
+    Route::get('/admin/shift', [ShiftController::class, 'index'])->name('shift.index');
+
 });
 
 //Karyawan Routes

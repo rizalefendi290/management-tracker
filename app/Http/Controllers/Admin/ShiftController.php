@@ -36,7 +36,7 @@ class ShiftController extends Controller
     public function edit($id) {
         $shift = Shift::findOrFail($id);
         $users = User::where('role', 'karyawan')->get();
-        return view('admin.shift.index', compact('shift', 'users'));
+        return view('admin.shift.edit', compact('shift', 'users'));
     }
 
     public function update(Request $request, $id) {

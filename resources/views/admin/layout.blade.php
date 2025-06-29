@@ -4,60 +4,84 @@
     <meta charset="UTF-8">
     <title>Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
-            background: url('https://source.unsplash.com/random/1920x1080') no-repeat center center fixed;
-            background-size: cover;
+            background: #f8f9fa;
             animation: fadeIn 1s ease-in;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 1rem;
+            color: white;
         }
 
-        .logout-container {
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
+        .sidebar a {
+            color: #adb5bd;
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+            color: #fff;
+        }
+
+        .content {
+            margin-left: 250px;
+            margin-top: 56px;
+            padding: 20px;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        .alert {
-            transition: opacity 0.5s ease;
-        }
     </style>
 </head>
 <body>
-    <div class="logout-container">
-        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-outline-dark">Logout</button>
-        </form>
-    </div>
-    
-    <div class="container mt-4">
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    {{-- Navbar --}}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Panel</a>
+            <div class="ms-auto">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light btn-sm"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
+                </form>
+            </div>
         </div>
+    </nav>
+
+    {{-- Sidebar --}}
+    <div class="sidebar">
+        <h5 class="text-center">Menu</h5>
+        <a href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+        <a href="{{ route('gaji.index') }}"><i class="bi bi-cash-coin me-2"></i> Gaji</a>
+        <a href="{{ route('shift.index') }}"><i class="bi bi-calendar2-week me-2"></i> Shift</a>
+    </div>
+
+    {{-- Konten Utama --}}
+    <div class="content">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         @endif
 
         @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         @endif
 
         @yield('content')

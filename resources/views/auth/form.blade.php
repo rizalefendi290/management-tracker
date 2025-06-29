@@ -150,7 +150,7 @@
             }
         }
 
-        @if ($errors->any())
+        @if($errors->any())
             const registerTabLink = document.querySelector('a[href="#registerTab"]');
             if (registerTabLink) {
                 new bootstrap.Tab(registerTabLink).show();

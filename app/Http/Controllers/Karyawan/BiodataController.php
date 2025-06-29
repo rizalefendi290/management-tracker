@@ -42,22 +42,26 @@ class BiodataController extends Controller
             return redirect('/auth')->with('error', 'Anda harus login.');
         }
 
-        $validated = $request->validate([
+        $request->validate([
             'alamat' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
+            'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);
 
         Biodata::create([
-            'user_id' => $userId,
-            'alamat' => $validated['alamat'],
-            'no_hp' => $validated['no_hp'],
-            'tanggal_lahir' => $validated['tanggal_lahir'],
-            'jenis_kelamin' => $validated['jenis_kelamin'],
+            'user_id' => $userId, // ✅ ini sudah benar
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'jenis_kelamin' => $request->jenis_kelamin,
         ]);
-         return redirect()->route('karyawan.biodata.index')->with('success', 'Biodata disimpan.');
+
+        return redirect()->route('karyawan.biodata.index')->with('success', 'Biodata berhasil disimpan.');
     }
+
 
     public function edit($id)
     {
@@ -78,7 +82,8 @@ class BiodataController extends Controller
 
         $validated = $request->validate([
             'alamat' => 'required|string|max:255',
-            'no_telp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20',
+            'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);

@@ -14,13 +14,18 @@
 
     <div class="mb-3">
         <label>No Telp</label>
-        <input type="text" name="no_telp" value="{{ $biodata->no_telp }}" class="form-control" required>
+        <input type="text" name="no_hp" value="{{ $biodata->no_telp }}" class="form-control" required>
     </div>
 
     <div class="mb-3">
         <label>Tanggal Lahir</label>
         <input type="date" name="tanggal_lahir" value="{{ $biodata->tanggal_lahir }}" class="form-control" required>
     </div>
+    <div class="mb-3">
+        <label>Tempat Lahir</label>
+        <input type="text" name="tempat_lahir" class="form-control" required>
+    </div>
+
 
     <div class="mb-3">
         <label>Jenis Kelamin</label>

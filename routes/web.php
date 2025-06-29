@@ -65,6 +65,9 @@ Route::prefix('karyawan')->group(function () {
         'destroy' => 'karyawan.biodata.destroy',
     ]);
 
+    Route::post('/karyawan/biodata', [BiodataController::class, 'store'])->name('karyawan.biodata.store');
+
+
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
 
     Route::resource('/berkas', BerkasController::class)->names([

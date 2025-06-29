@@ -1,84 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Login / Daftar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    {{-- Bootstrap Icons --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         body {
-            background: url('https://source.unsplash.com/random/1920x1080') no-repeat center center fixed;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://source.unsplash.com/1920x1080/?technology,workspace') no-repeat center center fixed;
             background-size: cover;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .form-box {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             max-width: 500px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-btn {
-            cursor: pointer;
-        }
-
-        .nav-tabs .nav-link {
-            border: none;
-            border-radius: 0;
-            margin-bottom: -1px;
+            margin: 80px auto;
         }
 
         .nav-tabs .nav-link.active {
-            background-color: #007bff;
-            color: white;
+            background-color: #0d6efd;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background-color: #0d6efd;
             border: none;
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #0b5ed7;
+        }
+
+        .tab-content {
+            margin-top: 1rem;
+        }
+
+        .alert {
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container">
     <div class="form-box">
-        <ul class="nav nav-tabs mb-4" id="formTab">
+        <ul class="nav nav-tabs justify-content-center" id="formTab">
             <li class="nav-item">
-                <a class="nav-link active tab-btn" data-bs-toggle="tab" href="#loginTab">Login</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#loginTab">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link tab-btn" data-bs-toggle="tab" href="#registerTab">Daftar</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#registerTab">Daftar</a>
             </li>
         </ul>
 
         <div class="tab-content">
-            {{-- LOGIN FORM --}}
+            {{-- Login Tab --}}
             <div class="tab-pane fade show active" id="loginTab">
-                <form action="/login" method="POST">
+                <form action="/login" method="POST" class="mt-3">
                     @csrf
-                    @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    @endif
 
-                    {{-- LOGOUT --}}
                     @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>">
-                    </div>
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
 
-                    @if ($errors->has('email') || $errors->has('password'))
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="********" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            </div>
+
+            {{-- Register Tab --}}
+            <div class="tab-pane fade" id="registerTab">
+                <form method="POST" action="/register" class="mt-3">
+                    @csrf
+
+                    @if ($errors->any())
                         <div class="alert alert-danger">
-                            <ul>
+                            <ul class="mb-0">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -87,75 +123,59 @@
                     @endif
 
                     <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required/>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
-                </form>
-            </div>
-
-            {{-- REGISTER FORM --}}
-            <div class="tab-pane fade" id="registerTab">
-                <form method="POST" action="/register">
-                    @csrf
-
-                    <div class="mb-3">
                         <label>Nama</label>
-                        <input type="text" name="name" class="form-control" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" name="name" class="form-control" placeholder="Nama lengkap" required>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label>Email</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="********" required>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label>Daftar Sebagai</label>
-                        <select name="role" class="form-control" required>
+                        <select name="role" class="form-select" required>
                             <option value="">-- Pilih Role --</option>
                             <option value="admin">Admin</option>
                             <option value="karyawan">Karyawan</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Daftar</button>
+
+                    <button type="submit" class="btn btn-primary w-100">Daftar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+{{-- Bootstrap JS --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const tab = urlParams.get('tab');
-        if (tab === 'register' && document.getElementById('registerTab')) {
-            const registerTabLink = document.querySelector('a[href="#registerTab"]');
-            if (registerTabLink) {
-                new bootstrap.Tab(registerTabLink).show();
-            }
-        } else if (document.getElementById('loginTab')) {
-            const loginTabLink = document.querySelector('a[href="#loginTab"]');
-            if (loginTabLink) {
-                new bootstrap.Tab(loginTabLink).show();
-            }
-        }
-
-        @if($errors->any())
-            const registerTabLink = document.querySelector('a[href="#registerTab"]');
-            if (registerTabLink) {
-                new bootstrap.Tab(registerTabLink).show();
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        @if ($errors->any())
+            const tab = new bootstrap.Tab(document.querySelector('a[href="#registerTab"]'));
+            tab.show();
         @endif
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'register') {
+            const regTab = new bootstrap.Tab(document.querySelector('a[href="#registerTab"]'));
+            regTab.show();
+        }
     });
 </script>
 </body>
